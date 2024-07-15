@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using VirtueSky.Inspector;
-
-
 #if VIRTUESKY_FIREBASE
 using Firebase;
 using Firebase.Extensions;
 #endif
-
 #if VIRTUESKY_FIREBASE_REMOTECONFIG
 using Firebase.RemoteConfig;
 #endif
@@ -21,6 +18,7 @@ namespace VirtueSky.RemoteConfigs
     public class FirebaseRemoteConfigManager : MonoBehaviour
     {
         [SerializeField] private bool dontDestroyOnLoad;
+        [Space, SerializeField] private TypeInitRemoteConfig typeInitRemoteConfig;
 #if VIRTUESKY_FIREBASE
         [Space, ReadOnly, SerializeField] private DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
 #endif
@@ -29,6 +27,13 @@ namespace VirtueSky.RemoteConfigs
 
         private bool _isFetchRemoteConfigCompleted = false;
         private static FirebaseRemoteConfigManager _instance;
+
+        #region API
+
+        public static bool IsFetchRemoteConfigCompleted => _instance._isFetchRemoteConfigCompleted;
+        public static List<FirebaseRemoteConfigData> ListRemoteConfigData => _instance.listRemoteConfigData;
+
+        #endregion
 
         private void Awake()
         {
@@ -45,18 +50,25 @@ namespace VirtueSky.RemoteConfigs
             {
                 Destroy(gameObject);
             }
+
+            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnAwake)
+            {
+                Init();
+            }
         }
 
-        #region API
 
-        public static bool IsFetchRemoteConfigCompleted => _instance._isFetchRemoteConfigCompleted;
-        public static List<FirebaseRemoteConfigData> ListRemoteConfigData => _instance.listRemoteConfigData;
-
-        #endregion
-
-#if VIRTUESKY_FIREBASE
         private void Start()
         {
+            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnStart)
+            {
+                Init();
+            }
+        }
+
+        private void Init()
+        {
+#if VIRTUESKY_FIREBASE
             _isFetchRemoteConfigCompleted = false;
             if (isSetupDefaultData)
             {
@@ -81,8 +93,8 @@ namespace VirtueSky.RemoteConfigs
                                    dependencyStatus);
                 }
             });
-        }
 #endif
+        }
 
 #if VIRTUESKY_FIREBASE_REMOTECONFIG && VIRTUESKY_FIREBASE
         private Task FetchDataAsync()
@@ -207,5 +219,11 @@ namespace VirtueSky.RemoteConfigs
             }
         }
 #endif
+    }
+
+    enum TypeInitRemoteConfig
+    {
+        InitOnAwake,
+        InitOnStart
     }
 }
