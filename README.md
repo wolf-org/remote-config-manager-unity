@@ -32,7 +32,7 @@ dependency `extensions-unity-1.0.5`
 ```
 If you use [game-data-unity](https://github.com/wolf-package/game-data-unity), add the library below and define symbol `VIRTUESKY_DATA`
 ```csharp
-"com.wolf-package.game-data":"https://github.com/wolf-package/game-data-unity.git#1.0.0",
+"com.wolf-org.game-data":"https://github.com/wolf-org/game-data-unity.git#1.0.2",
 ```
 
 ## Use
