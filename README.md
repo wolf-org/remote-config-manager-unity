@@ -22,13 +22,13 @@
 
 ### Add the line below to `Packages/manifest.json`
 
-for version `1.0.1`
+for version `1.0.2`
 ```csharp
-"com.wolf-package.remote-config":"https://github.com/wolf-package/remote-config-manager-unity.git#1.0.1",
+"com.wolf-org.remote-config":"https://github.com/wolf-org/remote-config-manager-unity.git#1.0.2",
 ```
-dependency `extensions-unity-1.0.3`
+dependency `extensions-unity-1.0.5`
 ```csharp
-"com.wolf-package.extensions":"https://github.com/wolf-package/extensions-unity.git#1.0.3",
+"com.wolf-org.extensions":"https://github.com/wolf-org/extensions-unity.git#1.0.5",
 ```
 If you use [game-data-unity](https://github.com/wolf-package/game-data-unity), add the library below and define symbol `VIRTUESKY_DATA`
 ```csharp
