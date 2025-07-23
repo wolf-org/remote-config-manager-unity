@@ -9,14 +9,13 @@ using VirtueSky.Inspector;
 using Firebase;
 using Firebase.Extensions;
 #endif
+
 #if VIRTUESKY_FIREBASE_REMOTECONFIG
 using Firebase.RemoteConfig;
 #endif
 
-namespace VirtueSky.RemoteConfigs
-{
-    public class FirebaseRemoteConfigManager : MonoBehaviour
-    {
+namespace VirtueSky.RemoteConfigs {
+    public class FirebaseRemoteConfigManager : MonoBehaviour {
         [SerializeField] private bool dontDestroyOnLoad;
         [Space, SerializeField] private TypeInitRemoteConfig typeInitRemoteConfig;
 #if VIRTUESKY_FIREBASE
@@ -32,42 +31,37 @@ namespace VirtueSky.RemoteConfigs
 
         public static bool IsFetchRemoteConfigCompleted => _instance._isFetchRemoteConfigCompleted;
         public static List<FirebaseRemoteConfigData> ListRemoteConfigData => _instance.listRemoteConfigData;
+#if VIRTUESKY_FIREBASE
+        public static DependencyStatus DependencyStatus => _instance.dependencyStatus;
+#endif
 
         #endregion
 
-        private void Awake()
-        {
-            if (dontDestroyOnLoad)
-            {
+        private void Awake() {
+            if (dontDestroyOnLoad) {
                 DontDestroyOnLoad(this.gameObject);
             }
 
-            if (_instance == null)
-            {
+            if (_instance == null) {
                 _instance = this;
             }
-            else
-            {
+            else {
                 Destroy(gameObject);
             }
 
-            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnAwake)
-            {
+            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnAwake) {
                 Init();
             }
         }
 
 
-        private void Start()
-        {
-            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnStart)
-            {
+        private void Start() {
+            if (typeInitRemoteConfig == TypeInitRemoteConfig.InitOnStart) {
                 Init();
             }
         }
 
-        private void Init()
-        {
+        private void Init() {
 #if VIRTUESKY_FIREBASE
             _isFetchRemoteConfigCompleted = false;
             if (isSetupDefaultData)
@@ -149,10 +143,8 @@ namespace VirtueSky.RemoteConfigs
 #if UNITY_EDITOR
         private const string pathDefaultScript = "Assets/_Root/Scripts";
         [Button]
-        private void GenerateRemoteData()
-        {
-            if (!Directory.Exists(pathDefaultScript))
-            {
+        private void GenerateRemoteData() {
+            if (!Directory.Exists(pathDefaultScript)) {
                 Directory.CreateDirectory(pathDefaultScript);
             }
 
@@ -161,14 +153,12 @@ namespace VirtueSky.RemoteConfigs
             str += "\n\tpublic struct RemoteData\n\t{";
 
             var listRmcData = listRemoteConfigData;
-            for (int i = 0; i < listRmcData.Count; i++)
-            {
+            for (int i = 0; i < listRmcData.Count; i++) {
                 var rmcKey = listRmcData[i].key;
 
                 str += $"\n\t\tpublic const string KEY_{rmcKey.ToUpper()} = \"{rmcKey}\";";
 
-                switch (listRmcData[i].typeRemoteConfigData)
-                {
+                switch (listRmcData[i].typeRemoteConfigData) {
                     case TypeRemoteConfigData.StringData:
                         str +=
                             $"\n\t\tpublic const string DEFAULT_{rmcKey.ToUpper()} = \"{listRmcData[i].defaultValueString}\";";
@@ -213,16 +203,14 @@ namespace VirtueSky.RemoteConfigs
             writer.Close();
             AssetDatabase.ImportAsset(productImplPath);
 
-            string GetBool(bool condition)
-            {
+            string GetBool(bool condition) {
                 return condition ? "true" : "false";
             }
         }
 #endif
     }
 
-    enum TypeInitRemoteConfig
-    {
+    enum TypeInitRemoteConfig {
         InitOnAwake,
         InitOnStart
     }

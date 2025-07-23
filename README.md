@@ -22,9 +22,9 @@
 
 ### Add the line below to `Packages/manifest.json`
 
-for version `1.0.2`
+for version `1.0.3`
 ```json
-"com.wolf-org.remote-config":"https://github.com/unity-package/remote-config-manager-unity.git#1.0.2",
+"com.wolf-org.remote-config":"https://github.com/unity-package/remote-config-manager-unity.git#1.0.3",
 ```
 dependency `extensions-unity-1.0.5`
 ```json
